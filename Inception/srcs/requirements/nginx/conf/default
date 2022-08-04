@@ -1,0 +1,47 @@
+server {
+	listen 443 ssl default_server;
+	listen [::]:443 ssl default_server;
+	root /var/www/html/wordpress/public_html;
+	index index.php index.html;
+	server_name localhost;
+
+	ssl_certificate     certificate.crt;
+	ssl_certificate_key private.key;
+	ssl_protocols       TLSv1.2;
+
+	access_log /var/log/nginx/localhost.access.log;
+	error_log /var/log/nginx/localhost.error.log;
+
+	location / {
+		try_files $uri $uri/ =404;
+	}
+
+	location ~ \.php$ {
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		fastcgi_index index.php;
+		fastcgi_pass wordpress_cont:9000;
+		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+		fastcgi_param SCRIPT_NAME $fastcgi_script_name;
+		include fastcgi_params;
+	}
+
+#	location ~ /\.ht {
+#		deny all;
+#	}
+#
+#	location = /favicon.ico {
+#		log_not_found off;
+#		access_log off;
+#	}
+#
+#	location = /robots.txt {
+#		allow all;
+#		log_not_found off;
+#		access_log off;
+#	}
+#
+#	location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+#		expires max;
+#		log_not_found off;
+#	}
+}

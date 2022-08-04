@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeScript: Hello, World!</title>
+	<script type="text/javascript" src="/index.js"></script>
+</head>
+<body>
+	<h1>FRIENDS</h1>
+	<button type="button" onclick="test()">test</button>
+	<div>
+		<input type="number" id="first">
+		<button type='button' onclick='select()'>Select Room</button>
+		<button type='button' onclick='block()'>block user</button>
+		<button type='button' onclick='unblock()'>unblock user</button>
+		<button type='button' onclick='add_friend()'>add friend</button>
+		<button type='button' onclick='rm_friend()'>remove friend</button>
+	</div>
+	<div>
+		<input type='text' id='message' />
+		<button type='button' onclick='send_dm()'>Send Message</button>
+	</div>
+	<h1>GROUPS</h1>
+	<div>
+		<form action="javascript:create_group();" method='POST' id="1">
+			name:		<input type="text" name="name" id="name"><br>
+			private:	<input type="checkbox" name="priv" id="priv"><br>
+			password:	<input type="text" name="pass" id="pass"><br>
+			<input type="submit" value="Submit">
+		</form>
+	</div>
+	<h2>
+		Owner controls
+	</h2>
+	<div>
+		<input type="number" id="second">
+		<button type='button' onclick='add_user_group()'>add user to group</button>
+		<button type='button' onclick='mute_user_group()'>mute user</button>
+		<button type='button' onclick='unmute_user_group()'>unmute user</button>
+		<button type='button' onclick='rm_user_group()'>kick user</button>
+		<button type='button' onclick='promote_user_group()'>promote user</button>
+		<button type='button' onclick='demote_user_group()'>demote user</button>
+	</div>
+	<div>
+		<input type='text' id='group_message' />
+		<button type='button' onclick='send_group_message()'>Send Message</button>
+	</div>
+	<div>
+		<button type="button" onclick="rm_group()">rm group</button>
+	</div>
+	<h2>
+		Admin controls
+	</h2>
+	<h2>
+		participant controls
+	</h2>
+</body>
+</html>
