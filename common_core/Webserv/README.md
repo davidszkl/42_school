@@ -5,6 +5,7 @@ A simple web server implementation in c++ , based on nginx.
 
 ## Installation
 Run `make`, then webserv can be ran with `./webserv`  
+`./webserv` can take on aptional argument that is a path to a config file  
 
 ## Supported Features
 - Redirections
