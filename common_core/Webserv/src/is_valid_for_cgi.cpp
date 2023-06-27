@@ -38,9 +38,9 @@ static bool is_exec(const std::string& file_path, const std::string& root)
 
 	const bool b = (access((root + file_path).c_str(), X_OK) != -1);
 	if (b)
-		logn(root + file_path + " is an executable file");
+		xlogn(root + file_path + " is an executable file");
 	else
-		logn(root + file_path + " is not an executable file");
+		xlogn(root + file_path + " is not an executable file");
 	return b;
 }
 
@@ -73,17 +73,17 @@ static std::size_t get_end_path(const std::string& path, const std::string& root
 int is_valid_for_cgi(const std::string& full_message, std::string root, const std::string& location, std::size_t max_body)
 {
 	if (root != "" && root[root.length() -1] != '/') root += '/';
-	logn("Checking if message is valid for cgi...");
+	xlogn("Checking if message is valid for cgi...");
 	using std::string;
 	const string request = get_next_word(full_message);
 	if (0 != access("/usr/bin/env", X_OK))
 	{
-		logn("/usr/bin/env is not executable. Python CGI needs it in sha-bang. is_valid_for _cgi returned false");
+		xlogn("/usr/bin/env is not executable. Python CGI needs it in sha-bang. is_valid_for _cgi returned false");
 		return false;
 	}
 	if (request != "GET" && request != "POST")
 	{
-		logn("Request ivalid for cgi: request==" + request);
+		xlogn("Request ivalid for cgi: request==" + request);
 		return false;
 	}
 	string path = get_next_word(&full_message[request.length() + 1]);
@@ -91,7 +91,7 @@ int is_valid_for_cgi(const std::string& full_message, std::string root, const st
 	const std::size_t path_end = get_end_path(path, root);
 	if (path_end == string::npos)
 	{
-		logn("Path is invalid for cgi: path==" + path + " --- root==" + root);
+		xlogn("Path is invalid for cgi: path==" + path + " --- root==" + root);
 		return false;
 	}
 	if (request == "POST")
@@ -99,17 +99,17 @@ int is_valid_for_cgi(const std::string& full_message, std::string root, const st
 		std::string content_type = get_header_info(full_message, "Content-Type");
 		if (content_type.length() > string("multipart/form-data; boundary=").length()
 		&& content_type.compare(0, 30, "multipart/form-data; boundary=") == 0)
-			logn("POST multipart detected if is_valid_for_cgi: " + content_type);
+			xlogn("POST multipart detected if is_valid_for_cgi: " + content_type);
 		else if (content_type != "application/x-www-form-urlencoded")
 		{
-			logn("CGI does not support this Content-Type: " + content_type);
-			logn("is_valid_for_cgi returned 415");
+			xlogn("CGI does not support this Content-Type: " + content_type);
+			xlogn("is_valid_for_cgi returned 415");
 			return 415;
 		}
 		std::string content_length = get_header_info(full_message, "Content-Length");
 		if (content_length == "")
 		{
-			logn("No Content-Length in header. is_valid_for cgi is returning false");
+			xlogn("No Content-Length in header. is_valid_for cgi is returning false");
 			return 411;
 		}
 		std::size_t cl;
@@ -117,18 +117,18 @@ int is_valid_for_cgi(const std::string& full_message, std::string root, const st
 			cl = std::atoi(content_length.c_str());
 			if (cl > max_body)
 			{
-				log(cl); log(" is greater than "); log(max_body);
-				logn(" is_valid_for_cgi returned 413");
+				xlog(cl); xlog(" is greater than "); xlog(max_body);
+				xlogn(" is_valid_for_cgi returned 413");
 				return 413;
 			}
 		} catch(...)
 		{
-			logn(content_length + " is an invalid Content-Legnth. is_valid_for cgi returns false");
+			xlogn(content_length + " is an invalid Content-Legnth. is_valid_for cgi returns false");
 			return false;
 		}
 		if (full_message.find("\r\n\r\n") + cl + 4 >= full_message.length())
-			logn("Warning: Content-Length too large");
+			xlogn("Warning: Content-Length too large");
 	}
-	logn("http message is valid for cgi");
+	xlogn("http message is valid for cgi");
 	return true;
 }

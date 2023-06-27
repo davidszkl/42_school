@@ -90,14 +90,14 @@ int main()
 		rval = execute_cgi(full_message, root, location, upload_pass, 1);
 		if (rval != 0)
 		{
-			log("Warning: execute_cgi returned a non-zero value: ");
-			logn(rval);
+			xlog("Warning: execute_cgi returned a non-zero value: ");
+			xlogn(rval);
 		}
 	}
 	else
 	{
-		log("Warning: is_valid_for_cgi returned ");
-		logn(rval);
+		xlog("Warning: is_valid_for_cgi returned ");
+		xlogn(rval);
 	}
 }
 

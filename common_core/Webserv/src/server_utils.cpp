@@ -14,7 +14,7 @@ string slurp_file(string file) {
 	buffer << stream.rdbuf();
 	string file_content(buffer.str());
 	if (!(file == "server_files/favicon.ico"))
-		logn("WEBPAGE\n" + file_content + "WEBPAGE\n");
+		xlogn("WEBPAGE\n" + file_content + "WEBPAGE\n");
 	return file_content;
 }
 

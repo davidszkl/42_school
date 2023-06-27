@@ -27,12 +27,12 @@ webserver::webserver(vector<config> config_vector):	_response_code(404), _sockle
 }
 
 webserver::~webserver() {
-	logn("webserv destructor");
+	xlogn("webserv destructor");
 	for (size_t n = 0; n < _servers.size(); n++) {
 		if (_servers[n]._sockfd)
 		{
-			log("CLOSING FD ");
-			logn(_servers[n]._sockfd);
+			xlog("CLOSING FD ");
+			xlogn(_servers[n]._sockfd);
 			close(_servers[n]._sockfd);
 		}
 	}
@@ -87,20 +87,20 @@ void webserver::listen_all()
 		if (accept_fd < 0)
 		{
 			accept_fd = get_fd_ready();
-			log("accept_fd = ");
-			logn(accept_fd);
+			xlog("accept_fd = ");
+			xlogn(accept_fd);
 			if ((_pollsock[0].fd = accept(accept_fd,								\
 										reinterpret_cast<sockaddr*>(&_client_addr),	\
 										&_socklen))									\
 										< 0)
 				throw webserver_exception("Accept failed");
 			_pollsock[0].events = POLLIN | POLLOUT;
-			log("Connection on fd ");
-			log(accept_fd);
-			logn(" accepted");
-			log("Connection fd is ");
-			logn(_pollsock[0].fd);
-			logn("");
+			xlog("Connection on fd ");
+			xlog(accept_fd);
+			xlogn(" accepted");
+			xlog("Connection fd is ");
+			xlogn(_pollsock[0].fd);
+			xlogn("");
 			continue ;
 		}
 
@@ -110,9 +110,9 @@ void webserver::listen_all()
 		int read_rval = read_msg(_pollsock[0].fd);
 		if (read_rval == -1) {
 			cerr << "Fatal problem occured during connection with " << accept_fd << endl;
-			log("ERRNO ");
-			logn(errno);
-			logn("");
+			xlog("ERRNO ");
+			xlogn(errno);
+			xlogn("");
 			throw webserver_exception("Poll fatal error");
 		}
 		if (read_rval != -2)
@@ -137,7 +137,7 @@ int webserver::read_msg(int fd) {;
 	char buffer[10000] = {0};
 	clear_request();
 	cerr << "Receiving message:\n";
-	logn("Method: " + _http_request._method);	
+	xlogn("Method: " + _http_request._method);	
 	int end = recv(fd, &buffer, 10000, 0);
 	if (end < 0)
 		return -1;
@@ -146,8 +146,8 @@ int webserver::read_msg(int fd) {;
 	buffer[end] = '\0';
 	_http_request._full_request += buffer;
 	_content_length = std::atoi(get_header_info(_http_request._full_request, "Content-Length").c_str());
-	log("_content_length = ");
-	logn(_content_length);
+	xlog("_content_length = ");
+	xlogn(_content_length);
 	return 0;
 }
 
@@ -162,9 +162,9 @@ void webserver::request_handler(const pollfd & fd, server & server) {
 	init_request(server);
 	cerr << _http_request._header << endl;
 	cerr << server._configs[_config_index].location_blocks[_location_index] << endl;
-	logn("request=================\n" + _http_request._full_request + "\nrequest=================");
-	logn("uri: " + _http_request._uri);
-	logn("");
+	xlogn("request=================\n" + _http_request._full_request + "\nrequest=================");
+	xlogn("uri: " + _http_request._uri);
+	xlogn("");
 	if (!_http_request._method.size()	||
 		!_http_request._uri.size()		||
 		!_http_request._version.size())
@@ -211,15 +211,15 @@ void webserver::init_request(const server & server) {
 			break ;
 	}
 	std::stringstream ss(_http_request._header_lines[0]);
-	logn("HEADER_LINES: " + _http_request._header_lines[0]);
+	xlogn("HEADER_LINES: " + _http_request._header_lines[0]);
 	ss >> _http_request._method;
-	logn("METHOD: " + _http_request._method);
+	xlogn("METHOD: " + _http_request._method);
 	ss >> _http_request._uri;
 	ss >> _http_request._version;
 	_config_index = get_config_index(server._port, server._configs, _http_request._header_lines);
 	if (_config_index == -1)
 	{
-		logn("config index is -1. setting path to " + _http_request._uri);
+		xlogn("config index is -1. setting path to " + _http_request._uri);
 		_http_request._path = _http_request._uri;
 		return;
 	}
@@ -227,9 +227,9 @@ void webserver::init_request(const server & server) {
 	const std::size_t l = server._configs[_config_index].location_blocks[_location_index].path.length();
 	_root = server._configs[_config_index].location_blocks[_location_index].root;
 	_http_request._path = _root + _http_request._uri.substr(l, _http_request._uri.length() - l);
-	logn("new request_path: " + _http_request._path);
-	logn("used root: " + _root);
-	logn("");
+	xlogn("new request_path: " + _http_request._path);
+	xlogn("used root: " + _root);
+	xlogn("");
 }
 
 void webserver::clear_errors() {						//clear servers that got shutdown for some reason
@@ -237,8 +237,8 @@ void webserver::clear_errors() {						//clear servers that got shutdown for some
 	{
 		if (_pollsock[n].revents & POLLERR)
 		{
-			log("killing server ");
-			logn(n);
+			xlog("killing server ");
+			xlogn(n);
 			close(_pollsock[n].fd);
 			_servers.erase(_servers.begin() + n);
 			_pollsock.erase(_pollsock.begin() + n);
@@ -273,7 +273,7 @@ int webserver::get_config_index(unsigned short _port,
 	for (std::size_t i = 0; i < _configs.size(); i++)
 		if (_configs[i].port == _port)
 			return i;
-	logn("get_config_index returned -1. Host=" + host + " port=" + i_to_str(_port));
+	xlogn("get_config_index returned -1. Host=" + host + " port=" + i_to_str(_port));
     return -1;
 }
 
@@ -319,7 +319,7 @@ body += "<html>\r\n<head>\n\
 		body += "<a href='" + _http_request._uri + (missing_slash ? "/" : "") + file_ent + "'>" + file_ent + "</a>\r\n";
 	}
 	body += "</body>\n</html>";
-	logn("index body:\n" + body);
+	xlogn("index body:\n" + body);
 	closedir(dir);
 	return body;
 }

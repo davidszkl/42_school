@@ -125,17 +125,17 @@ static int setup_and_exec(int output_fd,
 			perror("dup2()"); exit(1);
 		}
 		if (output_fd != 1) close(output_fd);
-		logn("child process changes dir to: " + exec_path2);
+		xlogn("child process changes dir to: " + exec_path2);
 		if (chdir(exec_path2.c_str()) == -1)
 		{
 			perror("chdir()");
 			exit(1);
 		}
-		logn("Commmand to split: " + command);
+		xlogn("Commmand to split: " + command);
 		char **split = ft_split(command.c_str(), ' ');
 		if (!split) { perror("ft_split()"); exit(1); }
 		fix_content_in_split(split);
-		logn("executing " + exec_path + ":");
+		xlogn("executing " + exec_path + ":");
 		execve(split[0], (char * const *)split, envp);
 		ft_freetab(const_cast<const char**>(split));
 		perror("execve()");
@@ -169,23 +169,23 @@ int execute_cgi(const std::string& full_message, std::string root, const std::st
 	cerr << "IN EXECUTE =" << upload_pass << endl;
 	if (root != "" && root[root.length() -1] != '/') root += '/';
 	using std::string;
-	logn("Executing cgi...");
+	xlogn("Executing cgi...");
 	const string request = get_next_word(full_message);
 	string path = get_next_word(&full_message[request.length() + 1]);
 	path = path.substr(location.length(), path.length() - location.length());
 	std::size_t path_end = get_end_path(path, root);
 	if (path_end == std::string::npos) path_end = path.length();
 	std::string exec_path = root + path.substr(0, path_end);
-	logn("path to cgi executable==" + exec_path);
-	logn("cgi request==" + request);
+	xlogn("path to cgi executable==" + exec_path);
+	xlogn("cgi request==" + request);
 	if (upload_pass == "")
-		logn("Warning: upload_pass passed to cgi is empty");
+		xlogn("Warning: upload_pass passed to cgi is empty");
 	std::size_t qpos = path_end;
 	while (qpos < path.length() && path[qpos] != '?')
 		qpos++;
 	const string path_info = path.substr(path_end, qpos - path_end);
 	const bool define_path = path_info != "";
-	logn("path_info==" + path_info);
+	xlogn("path_info==" + path_info);
 	string query_string;
 	bool define_query = false;
 	if (request == "GET" && qpos != path.length())
@@ -203,9 +203,9 @@ int execute_cgi(const std::string& full_message, std::string root, const std::st
 		}
 	}
 	if (define_query == true)
-		logn("QUERY_STRING==" + query_string);
+		xlogn("QUERY_STRING==" + query_string);
 	else
-		logn("No QUERY_STRING will be defined/passed to stdin");
+		xlogn("No QUERY_STRING will be defined/passed to stdin");
 	string content_type = get_header_info(full_message, "Content-Type");
 	bool define_content = (content_type != "");
 	return setup_and_exec(output_fd, request, define_query, query_string, define_path, path_info, exec_path, content_type, define_content, upload_pass, envp);

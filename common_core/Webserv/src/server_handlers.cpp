@@ -18,11 +18,11 @@ int	webserver::handle_GET(const pollfd &fd, server & server) {
 		return 0;
 	if (_http_request._path[_http_request._path.size() - 1] == '/')
 		_http_request._path += current_block.index;
-	logn("requestpath: " + _http_request._path);
+	xlogn("requestpath: " + _http_request._path);
     if (current_block.autoindex && stat(_http_request._path.c_str(), &s) == 0 && (s.st_mode & S_IFDIR))
     {
 		_response_code = OK;
-		logn("autoindexing from " + current_block.path);
+		xlogn("autoindexing from " + current_block.path);
 		_response_code = OK;
 		send_autoindex(fd);
 		return 0;
@@ -39,7 +39,7 @@ int	webserver::handle_GET(const pollfd &fd, server & server) {
 	}
 	else
 		_response_code = OK;
-	logn("RESPONSE_FILE\n" + response_file);
+	xlogn("RESPONSE_FILE\n" + response_file);
 	send_response(fd, response_file, body);
 	return 0;
 }
@@ -152,7 +152,7 @@ int webserver::do_cgi(const config::location& current_block, const config& curre
 				case 0:
 					break;
 				case 1:
-					logn("system errror in execute_cgi()");
+					xlogn("system errror in execute_cgi()");
 					break;
 				case FORBIDDEN:
 					_response_code = FORBIDDEN;

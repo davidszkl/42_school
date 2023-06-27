@@ -117,7 +117,7 @@ static void remove_locations_trailing_slash(config& c)
 		std::size_t l = c.location_blocks[i].path.length();
 		if (l != 1 && c.location_blocks[i].path[l - 1] == '/')
 		{
-			logn("removing trailing / of " + c.location_blocks[i].path + " location");
+			xlogn("removing trailing / of " + c.location_blocks[i].path + " location");
 			c.location_blocks[i].path = c.location_blocks[i].path.substr(0, --l);
 		}
 	}
@@ -166,7 +166,7 @@ static void add_trailing_to_root(config& c)
 		string& s = c.location_blocks[i].root;
 		if (s != "" && s[s.length() - 1] != '/')
 		{
-			logn("Adding trailing / to root " + s);
+			xlogn("Adding trailing / to root " + s);
 			s += "/";
 		}
 	}
@@ -210,7 +210,7 @@ static void check_config_vector(std::vector<config>& cv)
 static void display_vector(const std::vector<config>& v)
 {
 	for (std::size_t i = 0; i < v.size(); i++)
-		logn(v[i]);
+		xlogn(v[i]);
 }
 
 std::vector<config> init_configs(const std::string& file_path)
