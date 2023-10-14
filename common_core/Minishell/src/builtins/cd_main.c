@@ -22,7 +22,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	envp = init_envp(envp);
 	if (!envp)
-		return ((int)exec_perror("init_envp") + 1);
+		return (*(int*)exec_perror("init_envp") + 1);
 	r = ft_cd(&envp, argv);
 	ft_freetab(envp);
 	return (r);

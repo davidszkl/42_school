@@ -64,7 +64,7 @@ static int	expand_variables_2(char **s, size_t *i, char **envp, char **locals)
 
 	args.tmp1 = ft_substr(*s, *i + 1, var_len(&(*s)[*i + 1]));
 	if (!args.tmp1)
-		return ((int)free_4(s, 0, 0, 0));
+		return (*(int*)free_4(s, 0, 0, 0));
 	args.tmp2 = get_envp_val(args.tmp1, envp);
 	if (!args.tmp2 && locals)
 		args.tmp2 = get_envp_val(args.tmp1, locals);
@@ -82,8 +82,8 @@ static int	expand_variables_2(char **s, size_t *i, char **envp, char **locals)
 	free(*s);
 	*s = args.t;
 	if (!*s)
-		return ((int)free_4(args.tmp2, 0, 0, 0));
-	return ((int)free_4(args.tmp2, 0, 0, 0) + 1);
+		return (*(int*)free_4(args.tmp2, 0, 0, 0));
+	return (*(int*)free_4(args.tmp2, 0, 0, 0) + 1);
 }
 
 static int	expand_variables_3(char **s, size_t *i, int ret)

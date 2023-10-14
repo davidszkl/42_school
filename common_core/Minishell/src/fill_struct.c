@@ -13,10 +13,8 @@
 
 static int	ft_tabremrdir(t_main *main, int n)
 {
-	int		count;
 	int		j;
 
-	count = 0;
 	j = 0;
 	while (main->cline[n].argv[j])
 	{

@@ -35,7 +35,7 @@ int	open_files(t_file *files, int n)
 	{
 		files[i].fd = open(files[i].name, files[i].flags, 0644);
 		if (files[i].fd == -1)
-			b = (int)exec_perror(files[i].name);
+			b = *(int*)exec_perror(files[i].name);
 	}
 	return (b);
 }

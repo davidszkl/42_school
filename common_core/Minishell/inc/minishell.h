@@ -25,7 +25,8 @@
 # include <signal.h>
 # include <fcntl.h>
 # include <termios.h>
-# include <sys/param.h>
+#include <sys/wait.h>
+#include <sys/param.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 

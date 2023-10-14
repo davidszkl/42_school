@@ -68,10 +68,10 @@ char	*find_command(const char *command, char *envp[])
 	{
 		sub = ft_strjoin(s[i], command);
 		if (!sub)
-			return (free_spl(s) + (int)myfree(command));
+			return (free_spl(s) + *(int*)myfree(command));
 		if (!access(sub, F_OK))
-			return (sub + (int)free_spl(s) + (int)myfree(command));
+			return (sub + *(int*)free_spl(s) + *(int*)myfree(command));
 		free(sub);
 	}
-	return (free_spl(s) + (int)myfree(command));
+	return (free_spl(s) + *(int*)myfree(command));
 }

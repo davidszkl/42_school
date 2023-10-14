@@ -73,13 +73,13 @@ int	ft_cd(char ***envp, char **argv)
 	else
 		return (cd_error_m());
 	if (r == -1 && argv[1])
-		return ((int)exec_perror_cd(argv[1]) + 1);
+		return (*(int*)exec_perror_cd(argv[1]) + 1);
 	else if (r == -1)
 		return (perror_invalid_home(*envp));
 	getcwd(pwd, MAXPATHLEN + 1);
 	if (!envp_assign("OLD_PWD", old_pwd, envp))
-		return ((int)exec_perror_cd("envp_assign") + 1);
+		return (*(int*)exec_perror_cd("envp_assign") + 1);
 	if (!envp_assign("PWD", pwd, envp))
-		return ((int)exec_perror_cd("envp_assign") + 1);
+		return (*(int*)exec_perror_cd("envp_assign") + 1);
 	return (0);
 }
