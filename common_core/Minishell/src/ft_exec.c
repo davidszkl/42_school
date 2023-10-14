@@ -58,7 +58,7 @@ int	ft_exec(t_main *main)
 	{
 		args.pipes = malloc(sizeof(int) * main->pipecount * 2);
 		if (!args.pipes)
-			return (1 + *(int*)exec_perror("malloc"));
+			return (1 + (int)exec_perror("malloc"));
 	}
 	open_pipes(args.pipes, main->pipecount);
 	while (++args.i < args.n)

@@ -54,9 +54,9 @@ static void	child_ifs(t_exec_args *args, t_comm *comm, t_main *main, int *b)
 	if (!*b || args->fd_r == -1 || args->fd_w == -1)
 		sub_3(args, main);
 	if (dup2(args->fd_r, 0) == -1)
-		*b = *(int*)exec_perror("dup2");
+		*b = (int)exec_perror("dup2");
 	if (*b && dup2(args->fd_w, 1) == -1)
-		*b = *(int*)exec_perror("dup2");
+		*b = (int)exec_perror("dup2");
 	if (comm->rin)
 		close(args->fd_r);
 	if (comm->rout)
